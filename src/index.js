@@ -3,11 +3,16 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {TetrisProvider} from "./TetrisContext";
 
 ReactDOM.render(
+  <TetrisProvider>
   <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+      
+      <App ></App> 
+  
+     </React.StrictMode>
+     </TetrisProvider>,
   document.getElementById('root')
 );
 

@@ -6,6 +6,214 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  padding:0;
+  margin:0;
+}
+
+#root {
+  height:100%;
+}
+
+/* Welcome */
+.welcome {
+  background: yellow;
+  opacity: 0.8;
+  height: 60vh;
+  width: 40vw;
+  top: 20vh;
+  left: 30vw;  
+  position: absolute;  
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.welcome-pause {
+  text-align: center;
+}
+
+.play-resume {
+  width: 40%;
+  align-self: center;
+}
+
+.disappear {
+  display: none;
+}
+/* welcome */
+/*outer div*/
+
+
+
+
+.outerDiv {
+  
+  display: grid;
+  height: 100vh;
+  max-width: 100vw;
+  grid-template-columns: minmax(5px, 25vw) minmax(200px, 50vw) 25vw;
+  grid-template-rows: minmax(100px, 15vh) minmax(440px, 70vh) 100px;
+  grid-template-areas: 
+  " a b c"
+  " d e f"
+  " g h i" ;
+}
+
+.empty-up {
+  background: orange;
+  color: transparent;
+  grid-area: "a";
+}
+.void {
+  background:green;
+  color: transparent;
+  grid-area: "b";
+  z-index: 3;
+}
+.emptyLeft {
+  background: red;
+  color: transparent;
+  grid-area: "c";
+}
+.emptyRight {
+  background: blue;
+  color: yellow;
+  grid-area: "d";
+}
+.next-pieces {
+  grid-area: "f";
+  background: yellow ;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.emptydown {
+  background: turquoise;
+  grid-area: "g";
+  color:transparent;
+}
+
+.bottom {
+  grid-area: "h";
+  background: purple;
+  color:transparent;
+}
+
+.bottomRight {
+  grid-area: "i";
+  color: transparent;
+  background: brown;
+}
+
+
+/* Table */
+.table-container {
+  height: auto;
+  width: auto;
+  min-height: 400px ;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-area: "e";
+  background: black;
+}
+
+.table {    
+  z-index: 1;
+  background: black;
+  display: grid;
+  grid-template-columns: repeat(10, 20px);
+  grid-template-rows: repeat(20, 20px);
+  width: 200px;
+  height: 440px;
+}
+
+.small-box {
+  border: 0.5px solid red;
+}
+
+/* end of table */
+/* end of outer div */
+/*z Piece component */
+/* ZeroDegz */
+.container {
+  display:flex;  
+  justify-content: center;
+  align-items:flex-start ;
+  min-height: 40px;
+  z-index: 2;
+  
+  
+}
+
+.rect {
+  background: red;
+  color:transparent;
+  display: inline-block;
+  
+  padding: 0;
+  margin: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid blue;
+  border-radius: 10%;
+}
+.one {
+  border-right: 1px;
+}
+
+.two {
+  max-width: 20px;
+  display: flex;
+  min-height:40px;
+  flex-direction: column;
+  border-left: 1px;
+}
+
+.three {
+  align-self:flex-end;
+}
+/* end of ZeroDegz */
+
+/* Zninety */
+.ninety {
+  min-height: 60px;
+  display: flex;
+  justify-content: center;
+}
+
+.down {
+  align-self: flex-end;
+}
+
+/* end of Zninety */
+
+  
+/* end of z piece component */
+/* Bar */
+.barcontainer {
+  min-height: 80px;
+  min-width: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+/* end of  Bar */
+.rotated {
+  transform: rotate(180deg);
+}
+
+
+
+
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
