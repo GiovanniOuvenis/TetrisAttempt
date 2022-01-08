@@ -2,16 +2,16 @@ import React, { useContext} from 'react'
 import { TetrisContext } from "../TetrisContext";
 import RenderPieceWithColor from './WithStyles';
 
-function AfterNextPiece() {
-  const afterNextPieceContext = useContext(TetrisContext);
+function ThirdPiece() {
+  const thirdPieceContext = useContext(TetrisContext);
  
 
   
      return (
           <>
-           {afterNextPieceContext.afterNext.comp}
+           {thirdPieceContext.finalPiece.comp}
           </>
     )
 }
 
-export default RenderPieceWithColor(AfterNextPiece);
+export default RenderPieceWithColor(ThirdPiece);

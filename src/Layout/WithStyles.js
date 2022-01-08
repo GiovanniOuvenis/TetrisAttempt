@@ -1,5 +1,6 @@
 import React from 'react';
-import { TetrisConsumer } from '../TetrisContext';
+
+
  
 const RenderPieceWithColor = (ComponentArg) => {
     
@@ -7,30 +8,55 @@ const RenderPieceWithColor = (ComponentArg) => {
       constructor(props) {
           super(props)
           
+          this.state = {
+              bgClr : "",
+              brClr : ""
+          }
+      }      
+
+      pickColorBckgr = () => {
+        const colors = ["blue","blueviolet","orangered","olivedrab","fuschia","forestgreen","firebrick","red","orange","orchid","greenyellow","green","goldenrod","wheat","white","brown"]
+        const maxim = colors.length;
+        const ind = Math.floor(Math.random() * maxim);
+        this.setState(()=> {
+            return { bgClr : colors[ind]}
+        })
+    }   
+
+
+    pickColorBrdr = () => {
+        const colors = ["blue","blueviolet","orangered","olivedrab","fuschia","forestgreen","firebrick","red","orange","orchid","greenyellow","green","goldenrod","wheat","white","brown"]
+        const maxim = colors.length;
+        const ind = Math.floor(Math.random() * maxim);
+        this.setState(()=> {
+            return { brClr : colors[ind]}
+        })
+    }   
+
+
+      componentDidMount() {
+         this.pickColorBckgr();       
+         this.pickColorBrdr();
+    
       }
         
 
         render () {
             return (
-            <TetrisConsumer>
-                {(value) => {
-                    const { nexPiece } = value;
-                    const  bckClr  = nexPiece.backColor;  
-                    const  brdrClr = nexPiece.borderColor; 
-                    const root = document.getElementById("next");
+               
+                    <ComponentArg clrOne={this.state.bgClr} clrTwo={this.state.brClr}></ComponentArg>
                     
-                    
+                    )
+                }
+            }
+            return NewComponent
+        }
+            
+                            
                    
-                 return  <ComponentArg  clrOne={bckClr} clrTwo={brdrClr}/>
-                 }                
-                 }
+                              
+                 
                   
             
-            </TetrisConsumer>
-            )
-        }
-    }
-    return NewComponent
-}
 
 export default RenderPieceWithColor;

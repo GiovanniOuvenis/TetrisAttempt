@@ -11,7 +11,7 @@ const Welcome = (value) => {
 
     return (        
         <div className="welcome" id="welcome">
-           <section className= "welcome-pause" >Welcome to the shittiest Tetris Game!</section>      
+           <section className= "welcome-pause" >Welcome to the shittiest Tetris Game that you ever played!</section>      
            
            <button className="play-resume"  onClick={cont.removeWelcomeMessage}>Play!!!</button>
         </div>

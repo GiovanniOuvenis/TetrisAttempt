@@ -27,15 +27,10 @@ import { Pieces } from '../Data';
   },[])
 
 useEffect(() => {
-  const pickFirstShape = () => {
-    const maximum = Pieces.length;
-    const indexOfPiece = Math.floor(Math.random() * maximum);
-    return Pieces[indexOfPiece];
-   }
-   let result = pickFirstShape();
-   setNextItem(result);
-   
-   
+ //const next = document.getElementById("styled");
+   // console.log(document.getElementById("thirdPiece"))
+  // console.log(next);
+   // console.log(document.getElementById("afterNext"))
  
 }, [contextT.gameStatus])
 
