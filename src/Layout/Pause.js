@@ -12,7 +12,7 @@ import { TetrisContext } from '../TetrisContext';
     return (
         <div className="welcome disappear"  id='pause' >
             <h1 className='welcome-pause'>Take your time!</h1>
-            <button className='play-resume' onClick={conte.toggleOn}>Continue</button>
+            <button className='play-resume' onClick={conte.removePauseMessage}>Continue</button>
         </div>
     )
 }

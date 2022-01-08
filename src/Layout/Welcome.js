@@ -10,10 +10,10 @@ const Welcome = (value) => {
   
 
     return (        
-        <div className={cont.stat? "disappear" : "welcome"}>
+        <div className="welcome" id="welcome">
            <section className= "welcome-pause" >Welcome to the shittiest Tetris Game!</section>      
            
-           <button className="play-resume"  onClick={cont.toggle}>Play!!!</button>
+           <button className="play-resume"  onClick={cont.removeWelcomeMessage}>Play!!!</button>
         </div>
         
     )

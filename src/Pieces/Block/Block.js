@@ -1,18 +1,19 @@
-import React from 'react'
+import React from 'react';
+import RenderPieceWithColor from '../../Layout/WithStyles';
 
-function Block() {
+function Block(props) {
     return (
     <div className='container'>
-        <div className='two down'>
-            <div className='rect'>two</div>
-            <div className='rect'>two</div>
+        <div className='two'>
+            <div className='rect'style={{backgroundColor: props.clrOne, borderColor: props.clrTwo}}>two</div>
+            <div className='rect'style={{backgroundColor: props.clrOne, borderColor: props.clrTwo}}>two</div>
           </div>
           <div className='two'>
-            <div className='rect'>two</div>
-            <div className='rect'>two</div>
+            <div className='rect'style={{backgroundColor: props.clrOne, borderColor: props.clrTwo}}>two</div>
+            <div className='rect'style={{backgroundColor: props.clrOne, borderColor: props.clrTwo}}>two</div>
           </div>                    
     </div>
     )
 }
 
-export { Block }
+export default RenderPieceWithColor(Block);

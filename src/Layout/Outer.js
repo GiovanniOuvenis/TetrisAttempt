@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useLayoutEffect, useState, useRef} from 'react';
 import { TetrisContext } from '../TetrisContext';
 import { Table } from './Table';
 import {Emptydiv} from "./Emptydiv";
@@ -14,22 +14,36 @@ import Bottom from "./Bottom";
 
 
  function Outer() {
-   const conte = useContext(TetrisContext);
-   const [outerState, setOuterState] = useState(false);
+   const outerContext = useContext(TetrisContext);
+  
+
+
+
 
 useEffect(() => {
  const pauseElem = document.getElementById("pause");
    
- const logging = (event) => {
-       if (event.keyCode === 32) {
-           pauseElem.classList.remove("disappear");          
+ const logging = (e) => {
+     
+       if (e.keyCode === 32 && outerContext.gameStatus === true) {
+           e.preventDefault(); 
+           pauseElem.classList.remove("disappear"); 
+                    
        }
       
    }
    
     window.addEventListener("keyup", logging)
+   
     
-}, [conte.stat])
+}, [outerContext.gameStatus])
+
+
+    
+
+
+
+
 
     return (
         <div className='outerDiv' >
@@ -38,7 +52,7 @@ useEffect(() => {
             <EmptySpace></EmptySpace>
             <EmptyLeft></EmptyLeft>
             <EmptyRight></EmptyRight>
-            <Table></Table>
+            <Table ></Table>
             <NextPieces></NextPieces>
             <EmptyDown></EmptyDown>
             <Bottom></Bottom>

@@ -19,6 +19,11 @@ html {
 #root {
   height:100%;
 }
+ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-left: 0;
+}
 
 /* Welcome */
 .welcome {
@@ -57,7 +62,7 @@ html {
   display: grid;
   height: 100vh;
   max-width: 100vw;
-  grid-template-columns: minmax(5px, 25vw) minmax(200px, 50vw) 25vw;
+  grid-template-columns: minmax(5px, 25vw) minmax(200px, 50vw) minmax(100px,25vw);
   grid-template-rows: minmax(100px, 15vh) minmax(440px, 70vh) 100px;
   grid-template-areas: 
   " a b c"
@@ -92,6 +97,7 @@ html {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  color: violet;
 }
 
 .emptydown {
@@ -115,30 +121,30 @@ html {
 
 /* Table */
 .table-container {
-  height: auto;
-  width: auto;
-  min-height: 400px ;
+  width: 100%;
+  min-height: 440px ;
   min-width: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
   grid-area: "e";
-  background: black;
+  background: black
 }
 
 .table {    
   z-index: 1;
-  background: black;
+  background:white;
   display: grid;
   grid-template-columns: repeat(10, 20px);
-  grid-template-rows: repeat(20, 20px);
-  width: 200px;
-  height: 440px;
+  grid-template-rows: repeat(20, 20px);  
+  
 }
 
-.small-box {
+.listItem {
   border: 0.5px solid red;
-}
+  color: transparent;
+  background-color: black;
+} 
 
 /* end of table */
 /* end of outer div */
@@ -148,12 +154,16 @@ html {
   display:flex;  
   justify-content: center;
   align-items:flex-start ;
-  min-height: 40px;
+  min-height: 60px;
   z-index: 2;
   
   
 }
-
+.singleSquare {
+  border: 0.5px solid red;
+  background-color: black;
+  color: transparent;
+}
 .rect {
   background: red;
   color:transparent;
@@ -180,6 +190,10 @@ html {
 
 .three {
   align-self:flex-end;
+}
+
+.aux-class-sigma {
+  transform: translateY(20px);
 }
 /* end of ZeroDegz */
 

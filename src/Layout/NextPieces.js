@@ -1,20 +1,27 @@
-import React from 'react';
-import { ZeroDegz } from '../Pieces/zPiece/ZeroDegz';
-import { Block } from "../Pieces/Block/Block";
-import { HalfCross } from "../Pieces/HalfCross/HalfCross";
+import React, {useContext, useState, useEffect
+} from 'react';
+import { TetrisContext } from '../TetrisContext';
+import NextPiece from './NextPiece';
+import AfterNextPiece from './AfterNextPiece';
+
 
 export default function NextPieces() {
+    const nextPiecescontext = useContext(TetrisContext);
+    
+    
+    
+
     return (
         <div className='next-pieces'>
-            <div className='next'>
-                <Block></Block>
-            </div>
-            <div className='afternext'>
-                <ZeroDegz></ZeroDegz>
-            </div>
-            <div className='afterafternext'>
-                <HalfCross></HalfCross>
-            </div>
+            <NextPiece ></NextPiece> 
+            <AfterNextPiece></AfterNextPiece>     
         </div>
+
     )
 }
+        
+          
+        
+  
+   
+
