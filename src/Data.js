@@ -53,7 +53,7 @@ const Pieces = [
     {
         name: "halfRectangleRight",
         comp: <HalfRectangleRight></HalfRectangleRight>,
-        position: [5,6,6,26],
+        position: [5,6,16,26],
         backColor : "",
         borderColor: ""
     }

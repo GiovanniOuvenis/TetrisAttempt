@@ -128,7 +128,7 @@ ul {
   align-items: center;
   justify-content: center;
   grid-area: "e";
-  background: black
+  background: black;
 }
 
 .table {    
@@ -140,10 +140,10 @@ ul {
   
 }
 
-.listItem {
+.cell {
   border: 0.5px solid red;
   color: transparent;
-  background-color: black;
+  background-color: green;
 } 
 
 /* end of table */

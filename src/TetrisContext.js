@@ -14,6 +14,8 @@ function TetrisProvider({children}) {
     const [secondPiece, setSecondPiece] = useState({});
     // Third item shown in right column
     const [thirdPiece, setThirdPiece] = useState({});
+    const [squares, setSquares] = useState([]);
+    
     
 // Picks randomly one of the shapes defined in data.js from the Pieces array.
     const pickShape = () => {
@@ -30,15 +32,20 @@ function TetrisProvider({children}) {
 
         welcomeElement.classList.add("disappear");    
         setPlaying(playing=> !playing
-        );}
+        );
+       
+        }
+
     // removes pause message 
         const removePause = () => {
            
             const pauseElement = document.getElementById("pause");
             pauseElement.classList.add("disappear");
+
            
         }
 
+  
     
   
 // Fills every context state value with information. Used as effect in useEffect 
@@ -79,7 +86,38 @@ function TetrisProvider({children}) {
            })
                
          },[]) 
-     
+
+   useEffect(() => {
+         setSquares((squares)=> {
+             let objToPass = {};
+        if (squares.length === 0 ) {
+            for (let s=0; s <= 219; s++) {
+                objToPass = {
+                    num : s,
+                    brdColr: "red",
+                    backColr: "black"
+                }
+                squares.push(objToPass);
+            } 
+        } else {
+            squares.length = 0;
+            for (let q=0; q<= 219; q++) {
+              
+                objToPass = {
+                    num : q,
+                    brdColr: "red",
+                    backColr: "white"
+                }
+                squares.push(objToPass);
+            
+               
+            }
+        }
+
+             return squares
+         })
+     }, [playing]) 
+
 
         return (
             <TetrisContext.Provider value={{
@@ -88,8 +126,8 @@ function TetrisProvider({children}) {
                 removePauseMessage: removePause,
                 nexPiece: nextPiece,
                 afterNext: secondPiece,
-                finalPiece: thirdPiece
-                
+                finalPiece: thirdPiece,
+                square : squares
             }}>
                 
                 {children}

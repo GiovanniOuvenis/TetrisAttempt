@@ -4,12 +4,12 @@ import { TetrisContext } from "../TetrisContext";
 
 function Square(props) {
     const colorTogive = useContext(TetrisContext);   
-    const colored = colorTogive.coloring;
+    
     const {keys, numberId} = props;
   
 
     return (
-        <div className="cell" id={keys} >
+        <div className="cell" key={numberId} id={keys} style={{backgroundColor: props.back, borderColor: props.brd}}>
             cont
         </div>
     )

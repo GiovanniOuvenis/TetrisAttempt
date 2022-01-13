@@ -1,47 +1,37 @@
-import React, { useState, useEffect, useContext, useLayoutEffect} from 'react';
+import React, { useState, useEffect, useContext, useLayoutEffect, useRef} from 'react';
 import { Square } from "../Pieces/Square";
 import { TetrisContext} from "../TetrisContext";
 import { Pieces } from '../Data';
 
 
  function Table() {
-   const [contents, setContents] = useState([]);
-   const contextT = useContext(TetrisContext);  
-   const [nextItem, setNextItem] = useState({});
-
-   useEffect(()=> {
-    setContents(contents => {
-     let objToPass = {};
-      for (let i=0; i <= 219; i++) {
-        objToPass = {
-          num : i          
-        } 
-        contents.push(objToPass)
-       } 
-      
-         
-       return contents;
-    }
-    )
    
-  },[])
+   const tableContext = useContext(TetrisContext);  
+   const positions = tableContext.nexPiece.position;
+   const [contents, setContents] = useState([]);
+   const tableRef = useRef();
+   const itemsToShow = tableContext.square;
+   const status = tableContext.gameStatus;
+console.log(positions)
 
-useEffect(() => {
- //const next = document.getElementById("styled");
-   // console.log(document.getElementById("thirdPiece"))
-  // console.log(next);
-   // console.log(document.getElementById("afterNext"))
+   useEffect(() => {
+     setContents(contents => {
+       contents = [...itemsToShow];
+       
+       return contents
+     })
+   }, [status])
  
-}, [contextT.gameStatus])
+
 
 
     return (
       <div className='table-container'>
-        <ul className='table' >
+        <ul className='table' ref={tableRef}>
         {contents.map((item,index)=> {
-          return (<li id={`item${index}`} key={index} className='listItem' >
-            <Square keys={item.num} numberId={item.num}></Square>
-            </li>
+          return (
+            <Square keys={item.num} numberId={item.num} brd={item.brdColr} back={item.backColr}></Square>
+            
           )
         })}
         </ul>
