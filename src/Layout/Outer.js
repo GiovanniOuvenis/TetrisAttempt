@@ -28,38 +28,37 @@ useEffect(() => {
        if (e.keyCode === 32 && outerContext.gameStatus === true) {
            e.preventDefault(); 
            pauseElem.classList.remove("disappear"); 
-                    
-       }
-      
-   }
-   
+        }
+    }
     window.addEventListener("keyup", logging)
-   
-    
 }, [outerContext.gameStatus])
-
-
     
-
-
-
-
-
-    return (
-        <div className='outerDiv' >
-                     
-            <Emptydiv></Emptydiv>
-            <EmptySpace></EmptySpace>
-            <EmptyLeft></EmptyLeft>
-            <EmptyRight></EmptyRight>
-            <Table ></Table>
-            <NextPieces></NextPieces>
-            <EmptyDown></EmptyDown>
-            <Bottom></Bottom>
-            <BottomRight></BottomRight>
-        </div>
-    )
+    
+    
+return (
+    <div className='outerDiv' >
+                 
+        <Emptydiv></Emptydiv>
+        <EmptySpace></EmptySpace>
+        <EmptyLeft></EmptyLeft>
+        <EmptyRight></EmptyRight>
+        <Table ></Table>
+        <NextPieces></NextPieces>
+        <EmptyDown></EmptyDown>
+        <Bottom></Bottom>
+        <BottomRight></BottomRight>
+    </div>
+)
 }
 
 
 export { Outer }
+                    
+      
+
+
+    
+
+
+
+

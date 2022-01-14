@@ -10,16 +10,16 @@ import { Pause } from "./Layout/Pause";
 
 function App() {
 
-  
   return (
-    
     <> 
-        <Pause></Pause>
-        <Outer> </Outer>     
-        <Welcome></Welcome>
-        </>
+    <Outer> </Outer>     
+    </>
+       
+     );
+   }
+   
+   export default App;
+  
+       
     
-  );
-}
-
-export default App;
+       

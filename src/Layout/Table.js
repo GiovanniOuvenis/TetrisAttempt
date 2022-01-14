@@ -29,7 +29,7 @@ useLayoutEffect(()=>{
    setContents((contents)=> {
      contents.length = 0;
      const {borCol, backCol} = borderAndBackgroundColors;
-     console.log(borCol, backCol, squaresToPaint)
+     
      let objToPush = {};
  for (let s=0; s <= 219; s++) {
       
