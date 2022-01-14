@@ -3,13 +3,13 @@ import React, {useContext,useEffect
 import { TetrisContext } from "../TetrisContext";
 
 function Square(props) {
-    const colorTogive = useContext(TetrisContext);   
     
-    const {keys, numberId} = props;
+    
+    const {numberId} = props;
   
 
     return (
-        <div className="cell" key={numberId} id={keys} style={{backgroundColor: props.back, borderColor: props.brd}}>
+        <div className="cell" key={numberId} style={{backgroundColor: props.back, borderColor: props.brd}}>
             cont
         </div>
     )

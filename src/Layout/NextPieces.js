@@ -13,9 +13,7 @@ export default function NextPieces() {
 
     return (
         <div className='next-pieces'>
-                <NextPiece></NextPiece>
-                <AfterNextPiece></AfterNextPiece>
-                <ThirdPiece></ThirdPiece>
+               <h1>hrllooooo</h1>
         </div>
 
     )

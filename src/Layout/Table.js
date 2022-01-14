@@ -4,35 +4,61 @@ import { TetrisContext} from "../TetrisContext";
 import { Pieces } from '../Data';
 
 
- function Table() {
-   
+ function Table() {   
    const tableContext = useContext(TetrisContext);  
-   const positions = tableContext.nexPiece.position;
+   const borderAndBackgroundColors = tableContext.currCol;
+   const squaresToPaint = tableContext.initialPosition;
+   const [squaresToColor, setSquaresToColor] = useState([]);
    const [contents, setContents] = useState([]);
-   const tableRef = useRef();
-   const itemsToShow = tableContext.square;
-   const status = tableContext.gameStatus;
-console.log(positions)
 
-   useEffect(() => {
-     setContents(contents => {
-       contents = [...itemsToShow];
-       
-       return contents
-     })
-   }, [status])
+/*useEffect(()=> {
+setSquaresToColor((squaresToColor)=> {
+  if (squaresToColor.length === 0) {
+    squaresToColor = [...squaresToPaint];
+  } else {
+    squaresToColor = squaresToColor.map((item) => {
+      return item + 10;
+    })
+  }
+  return squaresToColor;
+})
+},[squaresToPaint])*/
+
+
+useLayoutEffect(()=>{
+   setContents((contents)=> {
+     contents.length = 0;
+     const {borCol, backCol} = borderAndBackgroundColors;
+     console.log(borCol, backCol, squaresToPaint)
+     let objToPush = {};
+ for (let s=0; s <= 219; s++) {
+      
+      objToPush = {
+        num: s,
+        brdr: "red",
+        bck: "black"
+      } 
+      if (squaresToPaint.includes(s)) {
+        objToPush = {
+          num: s,
+          brdr: borCol,
+          bck: backCol
+        }
+      }
+      contents.push(objToPush);
+    }
  
+ return contents
+})
+},[squaresToPaint])
 
 
 
     return (
       <div className='table-container'>
-        <ul className='table' ref={tableRef}>
-        {contents.map((item,index)=> {
-          return (
-            <Square keys={item.num} numberId={item.num} brd={item.brdColr} back={item.backColr}></Square>
-            
-          )
+        <ul className='table'>
+        {contents.map((item,index) => {
+          return <Square back={item.bck} brd={item.brdr} key={index} numberId={item.num}></Square>
         })}
         </ul>
         </div>
