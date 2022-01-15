@@ -26,7 +26,7 @@ function TetrisProvider({children}) {
        }
         
 
-    
+    /*
     // removes welcome message
     const removeWelcome = () => {
         const welcomeElement = document.getElementById("welcome");
@@ -35,21 +35,18 @@ function TetrisProvider({children}) {
         );
     }
 
-       
-
     // removes pause message 
         const removePause = () => {
             const pauseElement = document.getElementById("pause");
             pauseElement.classList.add("disappear");
         }
-           
-
-        // Fills every context state value with information. Used as effect in useEffect 
-            const pickNextPiece = (objArg) => {
-                 let result = pickShape();
-                objArg = {...result};        
-                return objArg;
-            }
+        
+                // Fills every context state value with information. Used as effect in useEffect 
+                    const pickNextPiece = (objArg) => {
+                         let result = pickShape();
+                        objArg = {...result};        
+                        return objArg;
+                    } */        
            
 
   
@@ -117,23 +114,7 @@ function TetrisProvider({children}) {
 }, [])
 
  
-// Το effect που κινεί τα κομμάτια προς τα κάτω όταν περάσει το καθορισμένο inteval. Η λογική σειρά 
-// είναι να βρίσκεται πριν τα effects  που κινουν δεξια και αριστερα τα κομμάτια για να εκτελείται όπως και 
-// να έχει όταν έχει έρθει η ώρα. Θα πρέπει να βρω έναν τρόπο να μειώνω το inteval κάθε κάποιο διάστημα
-// δηλαδη να αυξανεται προοδευτικα η ταχυτητα με την οποια πεφτουν τα κομματια
- 
 
- useEffect(()=> {
-     const belated = setInterval(()=> {
-        setPositionOfCurrentPiece((positionOfCurrentPiece)=>{
-            return positionOfCurrentPiece.map((currInd) => {
-                return currInd + 10;
-            })
-        })         
-     },1000);
-     return () => clearInterval(belated);
-    }, []
-    ) 
      
 // Εδώ χειριζόμαστε το πάτημα του δεξιά,  αριστερά και κατω βέλους.
  useEffect(() => {
@@ -170,12 +151,47 @@ function TetrisProvider({children}) {
                        return arg + 10;
                    })
                    return onePieceDown;
-               }          
+               }                
+    })
+ }
+ window.addEventListener("keyup", rightLeftDownKey)
+}, [])
+
+
+// Το effect που κινεί τα κομμάτια προς τα κάτω όταν περάσει το καθορισμένο inteval. Η λογική σειρά 
+// είναι να βρίσκεται πριν τα effects  που κινουν δεξια και αριστερα τα κομμάτια για να εκτελείται όπως και 
+// να έχει όταν έχει έρθει η ώρα. Θα πρέπει να βρω έναν τρόπο να μειώνω το inteval κάθε κάποιο διάστημα
+// δηλαδη να αυξανεται προοδευτικα η ταχυτητα με την οποια πεφτουν τα κομματια
+ 
+
+useEffect(()=> {
+    const belated = setInterval(()=> {
+       setPositionOfCurrentPiece((positionOfCurrentPiece)=>{
+           return positionOfCurrentPiece.map((currInd) => {
+               return currInd + 10;
            })
-        }
-        window.addEventListener("keyup", rightLeftDownKey)
-    }, [])
-                 
+       })         
+    },1000);
+    return () => clearInterval(belated);
+   }, []
+   ) 
+          
+
+return (
+    <TetrisContext.Provider value={{
+        gameStatus:playing,        
+        initialPosition: positionOfCurrentPiece, 
+        currCol : currentColor            
+    }}>
+        {children}
+    </TetrisContext.Provider>
+        )
+    }
+    const TetrisConsumer =  TetrisContext.Consumer;   
+       
+    export { TetrisProvider, TetrisContext, TetrisConsumer}
+                   
+                   
    
     
 
@@ -186,23 +202,6 @@ function TetrisProvider({children}) {
          
        
         
-    
-    return (
-        <TetrisContext.Provider value={{
-            gameStatus:playing,
-            removeWelcomeMessage:removeWelcome,
-            removePauseMessage: removePause,
-            initialPosition: positionOfCurrentPiece, 
-            currCol : currentColor            
-        }}>
-            {children}
-        </TetrisContext.Provider>
-            )
-        }
-        const TetrisConsumer =  TetrisContext.Consumer;   
-           
-        export { TetrisProvider, TetrisContext, TetrisConsumer}
-                       
             
             
     
