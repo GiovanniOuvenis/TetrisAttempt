@@ -15,15 +15,12 @@ function TetrisProvider({children}) {
     const [thirdPiece, setThirdPiece] = useState({});
     //
     const [currentColor, setCurrentColor] = useState({});
+    
     const [positionOfCurrentPiece, setPositionOfCurrentPiece] = useState([]);
     const [trigger, setTrigger] = useState(false);
-    
-// Picks randomly one of the shapes defined in data.js from the Pieces array.
-    const pickShape = () => {
-        const maxVal = Pieces.length;
-        const indTwo = Math.floor(Math.random() * maxVal);
-        return Pieces[indTwo];
-       }
+    const [occupied, setOccupied] = useState([]);
+
+
         
 
     /*
@@ -73,9 +70,10 @@ function TetrisProvider({children}) {
                             return pickNextPiece(thirdPiece);
                          })
                      },[]) */
-             
- 
-     
+   // We need to push the current pieces to the occupied array before the following effects run and we
+   //set new positions and colors
+
+   
 
  
  // Διαλέγω τυχαία χρώμα για το επόμενο κομμάτι. Θέλουμε να τρέξει σίγουρα μια φορά στην αρχή 
@@ -93,14 +91,14 @@ function TetrisProvider({children}) {
       currentColor.backCol = pickRandomColor();
       return currentColor;
      })
-    }, [])    
+    }, [occupied])    
 
 
 
 // Όπως και το προηγούμενο θέλω να τρέξει μια φορά στην αρχή και αμέσως μετά αφού έχει "κάτσει" κάποιο κομμάτι.
  useEffect(()=> {
    function pickRandomPositionsOfPiece() {
-       const positions = [[4,5,14,15],[3,4,5,6],[3,4,5,6],[4,13,14,15],[4,13,14,15],[4,5,15,16],[4,5,15,16],[4,5,13,14],[4,5,14,24],[4,5,15,25]]
+       const positions = [ [14,15,25,5], [4,5,15,16], [4,5,14,13],[4,5,14,24],[4,5,15,25] ]
        const int = positions.length;
        const positionsInt = Math.floor(Math.random() * int);
        let picked = positions[positionsInt]
@@ -111,7 +109,10 @@ function TetrisProvider({children}) {
       positionOfCurrentPiece = [...pickedPosition];
       return positionOfCurrentPiece;
   })
-}, [])
+
+  
+}, [occupied])
+
 
  
 
@@ -148,7 +149,12 @@ function TetrisProvider({children}) {
                    return noEdgyPiecesLeft.includes(true) ? positionOfCurrentPiece : onePieceLeft;
                } else if (e.keyCode === 40) {
                    let onePieceDown = positionOfCurrentPiece.map((arg) => {
-                       return arg + 10;
+                      if (arg >= 210 || occupied.includes(arg+10)) {
+                         return arg;
+                         
+                       } else {
+                           return arg + 10;
+                     }
                    })
                    return onePieceDown;
                }                
@@ -157,31 +163,90 @@ function TetrisProvider({children}) {
  window.addEventListener("keyup", rightLeftDownKey)
 }, [])
 
+// check for collision
 
-// Το effect που κινεί τα κομμάτια προς τα κάτω όταν περάσει το καθορισμένο inteval. Η λογική σειρά 
-// είναι να βρίσκεται πριν τα effects  που κινουν δεξια και αριστερα τα κομμάτια για να εκτελείται όπως και 
-// να έχει όταν έχει έρθει η ώρα. Θα πρέπει να βρω έναν τρόπο να μειώνω το inteval κάθε κάποιο διάστημα
-// δηλαδη να αυξανεται προοδευτικα η ταχυτητα με την οποια πεφτουν τα κομματια
+/*useEffect(()=> {
+   const collisionDone = (e) => {
+       if (e.keyCode === 40 ) {
+     setCollision((collision) => {
+       let check =  positionOfCurrentPiece.map((collided) => {
+            if (collided >= 210) {
+                return true;
+            } else if (occupied.includes(collided + 10)) {
+                return true;
+            }
+         })
+
+         if (check.includes(true)) {
+             return !collision
+         } else {
+             return collision;
+         }
+             
+        })
+   }
+}
+
+   window.addEventListener("keyup", collisionDone)
+},[])*/
+
+
+
+
+useEffect(()=>{
+    setOccupied((occupied) => {
+        let checkCondition = positionOfCurrentPiece.map((el)=> {
+            if (el <= 210) {
+                return false;
+            } else {
+                return true;
+            }
+        })
+        if  (checkCondition.includes(true)) {
+            return [occupied,...positionOfCurrentPiece];
+        } else {
+            return occupied;
+        }
+    })
+},[positionOfCurrentPiece])
+
+
  
-
+// Moving pieces to the next line
 useEffect(()=> {
     const belated = setInterval(()=> {
-       setPositionOfCurrentPiece((positionOfCurrentPiece)=>{
-           return positionOfCurrentPiece.map((currInd) => {
-               return currInd + 10;
-           })
-       })         
-    },1000);
-    return () => clearInterval(belated);
-   }, []
-   ) 
+       setPositionOfCurrentPiece((positionOfCurrentPiece)=>{         
+          return positionOfCurrentPiece.map((elem) => {
+              return elem + 10;
+          })
+            
+        })
+        
+},1000);
+return () => clearInterval(belated);
+}, []
+) 
+               
+             
+                 
+             
+
+             
+
+
+               
+         
+          
+           
           
 
 return (
     <TetrisContext.Provider value={{
         gameStatus:playing,        
         initialPosition: positionOfCurrentPiece, 
-        currCol : currentColor            
+        currCol : currentColor,        
+        
+        occ: occupied            
     }}>
         {children}
     </TetrisContext.Provider>

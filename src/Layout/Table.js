@@ -8,7 +8,7 @@ import { Pieces } from '../Data';
    const tableContext = useContext(TetrisContext);  
    const borderAndBackgroundColors = tableContext.currCol;
    const squaresToPaint = tableContext.initialPosition;
-   const [squaresToColor, setSquaresToColor] = useState([]);
+      
    const [contents, setContents] = useState([]);
 
 /*useEffect(()=> {
