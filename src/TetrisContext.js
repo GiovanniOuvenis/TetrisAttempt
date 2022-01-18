@@ -90,16 +90,16 @@ function TetrisProvider({children}) {
                        return piec - 1;
                    })
                    return noEdgyPiecesLeft.includes(true) ? positionOfCurrentPiece : onePieceLeft;
-               } else if (e.keyCode === 40) {
-                   let onePieceDown = positionOfCurrentPiece.map((arg) => {
-                      if (arg >= 210) {
-                         return arg;                         
-                       } else {
-                           return arg + 10;
-                     }
-                   })
-                   return onePieceDown;
-               }                
+               } /*else if (e.keyCode === 40) {
+                let onePieceDown = positionOfCurrentPiece.map((arg) => {
+                    if (arg >= 210) {
+                       return arg;                         
+                     } else {
+                         return arg + 10;
+                   }
+                 })
+                 return onePieceDown;
+             }     */           
     })
  }
  window.addEventListener("keyup", rightLeftDownKey)
@@ -127,14 +127,25 @@ useEffect(()=> {
 
 useEffect(()=>{
     setOccupied((occupied) => {
-        let checkCondition = positionOfCurrentPiece.map((el)=> {
+        let checkConditionOne = positionOfCurrentPiece.map((el)=> {
+          
             if (el <= 210) {
-                return false;
+                return false ;
             } else {
                 return true;
             }
-        })
-        if  (checkCondition.includes(true)) {
+        });
+        let checkConditionTwo = positionOfCurrentPiece.map((xy)=>{
+            let plusTen = xy + 10;
+           if (occupiedIndexes.includes(plusTen)) {
+               return true;
+           } else {
+               return false;
+           }
+        });
+            
+          
+        if  (checkConditionOne.includes(true) || checkConditionTwo.includes(true)) {
             let objectsToConcat = positionOfCurrentPiece.map((newOccupiedCell)=> {
                 return { num: newOccupiedCell, brdr: currentColor.borCol, bck: currentColor.backCol}
             })
