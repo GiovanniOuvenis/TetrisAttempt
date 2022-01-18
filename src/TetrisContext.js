@@ -5,79 +5,19 @@ import {Pieces} from "./Data";
 const TetrisContext = React.createContext();
 
 function TetrisProvider({children}) {
-    //  Initiates game
     const [playing, setPlaying ] = useState(false);    
-    // First Item shown in right column
-    const [nextPiece, setNextPiece] = useState({})
-    // Second item shown in right column
-    const [secondPiece, setSecondPiece] = useState({});
-    // Third item shown in right column
-    const [thirdPiece, setThirdPiece] = useState({});
-    //
     const [currentColor, setCurrentColor] = useState({});
-    
     const [positionOfCurrentPiece, setPositionOfCurrentPiece] = useState([]);
-    const [trigger, setTrigger] = useState(false);
     const [occupied, setOccupied] = useState([]);
+    const [occupiedIndexes, setOccupiedIndexes] = useState([]);
+    const [seconds, setSeconds] = useState(1500);
+    
 
 
-        
-
-    /*
-    // removes welcome message
-    const removeWelcome = () => {
-        const welcomeElement = document.getElementById("welcome");
-        welcomeElement.classList.add("disappear");    
-        setPlaying(playing=> !playing
-        );
-    }
-
-    // removes pause message 
-        const removePause = () => {
-            const pauseElement = document.getElementById("pause");
-            pauseElement.classList.add("disappear");
-        }
-        
-                // Fills every context state value with information. Used as effect in useEffect 
-                    const pickNextPiece = (objArg) => {
-                         let result = pickShape();
-                        objArg = {...result};        
-                        return objArg;
-                    } */        
-           
-
-  
-            // In the first render every state value is going to be blank. After the first render every piece is set to be the next one 
-            // e.g first receives value from second, second gets value from the third and only third receives a new value. 
-                  /*  useEffect(() => {        
-                        setNextPiece(()=>{
-                         if (Object.keys(nextPiece).length === 0) {
-                             return pickNextPiece(nextPiece);
-                         }
-                         else {
-                             return secondPiece;
-                         }
-                        }) 
-                        setSecondPiece(()=>{
-                            if (Object.keys(secondPiece).length === 0){
-                                return pickNextPiece(secondPiece);
-                            }
-                            else {
-                                return thirdPiece;
-                            }
-                        })
-                        setThirdPiece(()=>{
-                            return pickNextPiece(thirdPiece);
-                         })
-                     },[]) */
-   // We need to push the current pieces to the occupied array before the following effects run and we
-   //set new positions and colors
-
-   
 
  
- // Διαλέγω τυχαία χρώμα για το επόμενο κομμάτι. Θέλουμε να τρέξει σίγουρα μια φορά στην αρχή 
- //και κάθε φορά  που έχουμε ένα κομματι που "έκατσε."
+// Picking one random colors from the choices array. We want every next piece to have a different border
+// and background color
 
  useEffect(()=> {
     function pickRandomColor() {
@@ -95,10 +35,13 @@ function TetrisProvider({children}) {
 
 
 
-// Όπως και το προηγούμενο θέλω να τρέξει μια φορά στην αρχή και αμέσως μετά αφού έχει "κάτσει" κάποιο κομμάτι.
+// Here we set the positions of the piece that is currently moving.
+// It runs every time we have a collision and then the values of this effect get passed to 
+//  the occupied  array
+
  useEffect(()=> {
    function pickRandomPositionsOfPiece() {
-       const positions = [ [14,15,25,5], [4,5,15,16], [4,5,14,13],[4,5,14,24],[4,5,15,25] ]
+       const positions = [[14,15,25,5],[4,5,15,16],[4,5,14,13],[4,5,14,24],[4,5,15,25],[4,5,6,7] ]
        const int = positions.length;
        const positionsInt = Math.floor(Math.random() * int);
        let picked = positions[positionsInt]
@@ -109,9 +52,9 @@ function TetrisProvider({children}) {
       positionOfCurrentPiece = [...pickedPosition];
       return positionOfCurrentPiece;
   })
+}, [occupied])
 
   
-}, [occupied])
 
 
  
@@ -149,9 +92,8 @@ function TetrisProvider({children}) {
                    return noEdgyPiecesLeft.includes(true) ? positionOfCurrentPiece : onePieceLeft;
                } else if (e.keyCode === 40) {
                    let onePieceDown = positionOfCurrentPiece.map((arg) => {
-                      if (arg >= 210 || occupied.includes(arg+10)) {
-                         return arg;
-                         
+                      if (arg >= 210) {
+                         return arg;                         
                        } else {
                            return arg + 10;
                      }
@@ -163,32 +105,22 @@ function TetrisProvider({children}) {
  window.addEventListener("keyup", rightLeftDownKey)
 }, [])
 
-// check for collision
 
-/*useEffect(()=> {
-   const collisionDone = (e) => {
-       if (e.keyCode === 40 ) {
-     setCollision((collision) => {
-       let check =  positionOfCurrentPiece.map((collided) => {
-            if (collided >= 210) {
-                return true;
-            } else if (occupied.includes(collided + 10)) {
-                return true;
-            }
-         })
+// In the next effect, we check if the bottom piece of the current piece is marginal or occupied 
+// and then we provide an object in the form that can be consumed by the table component, e.g. including
+// the border and the background color. This form helps the table to present the squares the way we want them
+// but we are missing an array that includes only the numbers of the occupied items so we create this effect
+// This way, in the next effect we can check in an easier way if a squre is occupied
 
-         if (check.includes(true)) {
-             return !collision
-         } else {
-             return collision;
-         }
-             
+useEffect(()=> {
+    setOccupiedIndexes((occupiedIndexes)=> {
+        let mappedOccupied = occupied.map((itm) => {
+            return itm.num;
         })
-   }
-}
+        return occupiedIndexes.concat(mappedOccupied);
+    })
+},[occupied]);
 
-   window.addEventListener("keyup", collisionDone)
-},[])*/
 
 
 
@@ -203,7 +135,10 @@ useEffect(()=>{
             }
         })
         if  (checkCondition.includes(true)) {
-            return [occupied,...positionOfCurrentPiece];
+            let objectsToConcat = positionOfCurrentPiece.map((newOccupiedCell)=> {
+                return { num: newOccupiedCell, brdr: currentColor.borCol, bck: currentColor.backCol}
+            })
+            return occupied.concat(objectsToConcat);
         } else {
             return occupied;
         }
@@ -211,23 +146,44 @@ useEffect(()=>{
 },[positionOfCurrentPiece])
 
 
+
+
+
  
-// Moving pieces to the next line
+// Moving pieces to the next line. This effect should do only this.
+
 useEffect(()=> {
     const belated = setInterval(()=> {
        setPositionOfCurrentPiece((positionOfCurrentPiece)=>{         
           return positionOfCurrentPiece.map((elem) => {
               return elem + 10;
           })
-            
         })
+    },seconds);
+    return () => clearInterval(belated);
+    }, []
+    ) 
         
-},1000);
-return () => clearInterval(belated);
-}, []
-) 
+            
                
              
+return (
+    <TetrisContext.Provider value={{
+        gameStatus:playing,        
+        initialPosition: positionOfCurrentPiece, 
+        currCol : currentColor,        
+        occ: occupied,
+        occInd : occupiedIndexes
+                 
+    }}>
+        {children}
+    </TetrisContext.Provider>
+        )
+    }
+    const TetrisConsumer =  TetrisContext.Consumer;   
+       
+    export { TetrisProvider, TetrisContext, TetrisConsumer}
+        
                  
              
 
@@ -240,21 +196,6 @@ return () => clearInterval(belated);
            
           
 
-return (
-    <TetrisContext.Provider value={{
-        gameStatus:playing,        
-        initialPosition: positionOfCurrentPiece, 
-        currCol : currentColor,        
-        
-        occ: occupied            
-    }}>
-        {children}
-    </TetrisContext.Provider>
-        )
-    }
-    const TetrisConsumer =  TetrisContext.Consumer;   
-       
-    export { TetrisProvider, TetrisContext, TetrisConsumer}
                    
                    
    
