@@ -41,7 +41,7 @@ function TetrisProvider({children}) {
 
  useEffect(()=> {
    function pickRandomPositionsOfPiece() {
-       const positions = [[14,15,25,5],[4,5,15,16],[4,5,14,13],[4,5,14,24],[4,5,15,25],[4,5,6,7] ]
+       const positions = [/*[14,15,25,5],[4,5,15,16],[4,5,14,13],[4,5,14,24],[4,5,15,25],[4,5,6,7] */ [4,5,14,15]]
        const int = positions.length;
        const positionsInt = Math.floor(Math.random() * int);
        let picked = positions[positionsInt]
@@ -65,41 +65,54 @@ function TetrisProvider({children}) {
      const rightLeftDownKey = (e) => {
         e.preventDefault();
          setPositionOfCurrentPiece((positionOfCurrentPiece)=> {
-            let noEdgyPiecesRight = positionOfCurrentPiece.map((piec)=> {
-             if ((piec + 1) % 10 === 0) {
-                 return true;
-             } else {
-                 return false;
-             } 
-            })
-            let noEdgyPiecesLeft = positionOfCurrentPiece.map((posit)=> {
-                if (posit % 10 === 0) {
-                    return true;
-                } else {
-                    return false;
-                }
-            })
+            
 
               if (e.keyCode === 39) {
                 let onePieceRight = positionOfCurrentPiece.map((pos) => {
-                    return pos + 1;
+                    if ((pos + 1) % 10 === 0) {
+                           return true;
+                    } 
+                    if (occupiedIndexes.includes(pos + 1)) {
+                        return true;
+                    }
+                    else {
+                        return pos + 1;
+                    }
                 })
-                return  noEdgyPiecesRight.includes(true) ? positionOfCurrentPiece : onePieceRight;
+
+                if (onePieceRight.includes(true)) {
+                    return positionOfCurrentPiece;
+                } else {
+                    return onePieceRight;
+                }
+
+                
                } else if (e.keyCode === 37) {
                    let onePieceLeft = positionOfCurrentPiece.map((piec) => {
-                       return piec - 1;
+                       if (piec % 10 === 0) {
+                           return true;
+                       } 
+                       if (occupiedIndexes.includes(piec - 1)) {
+                           return true;
+                       }
+                       else {
+                           return piec - 1;
+                       }
                    })
-                   return noEdgyPiecesLeft.includes(true) ? positionOfCurrentPiece : onePieceLeft;
-               } /*else if (e.keyCode === 40) {
-                let onePieceDown = positionOfCurrentPiece.map((arg) => {
-                    if (arg >= 210) {
-                       return arg;                         
-                     } else {
-                         return arg + 10;
+                 
+                   if (onePieceLeft.includes(true)) {
+                       return positionOfCurrentPiece;
+                   } else {
+                       return onePieceLeft;
                    }
+
+                   
+               } else if (e.keyCode === 40) {
+                let onePieceDown = positionOfCurrentPiece.map((arg) => {
+                    return arg + 10;        
                  })
                  return onePieceDown;
-             }     */           
+             }               
     })
  }
  window.addEventListener("keyup", rightLeftDownKey)
@@ -114,11 +127,22 @@ function TetrisProvider({children}) {
 
 useEffect(()=> {
     setOccupiedIndexes((occupiedIndexes)=> {
-        let mappedOccupied = occupied.map((itm) => {
-            return itm.num;
-        })
-        return occupiedIndexes.concat(mappedOccupied);
+
+        if (occupiedIndexes.length === 0) {
+            let firstFour = occupied.map((f)=>{
+                return f.num;
+            })
+            return occupiedIndexes.concat(firstFour);
+        }
+         else {
+       let lengthMinusFour = occupied.length - 4;
+    let finalFour = occupied.slice(lengthMinusFour);
+    let itemsToAdd = finalFour.map((int) => {
+        return int.num;
     })
+    return occupiedIndexes.concat(itemsToAdd);
+    }
+})
 },[occupied]);
 
 
@@ -128,13 +152,16 @@ useEffect(()=> {
 useEffect(()=>{
     setOccupied((occupied) => {
         let checkConditionOne = positionOfCurrentPiece.map((el)=> {
-          
+           
             if (el <= 210) {
                 return false ;
-            } else {
+            }
+            
+             else {
                 return true;
             }
         });
+          
         let checkConditionTwo = positionOfCurrentPiece.map((xy)=>{
             let plusTen = xy + 10;
            if (occupiedIndexes.includes(plusTen)) {
@@ -143,14 +170,34 @@ useEffect(()=>{
                return false;
            }
         });
-            
+
+        let checkConditionThree = positionOfCurrentPiece.map((lor) => {
+            if (occupiedIndexes.includes(lor + 1) || occupiedIndexes.includes(lor -1)) {
+              return true;
+            }
+            else {
+                return false;
+            }      
+
+        })
+
+          console.log(checkConditionThree)  
           
-        if  (checkConditionOne.includes(true) || checkConditionTwo.includes(true)) {
+        if  (checkConditionOne.includes(true)) {
             let objectsToConcat = positionOfCurrentPiece.map((newOccupiedCell)=> {
                 return { num: newOccupiedCell, brdr: currentColor.borCol, bck: currentColor.backCol}
             })
             return occupied.concat(objectsToConcat);
-        } else {
+        } 
+        if  (checkConditionTwo.includes(true) && !checkConditionThree.includes(true)) {
+            let objectsToConcat = positionOfCurrentPiece.map((newOccupiedCell)=> {
+                return { num: newOccupiedCell, brdr: currentColor.borCol, bck: currentColor.backCol}
+            })
+            return occupied.concat(objectsToConcat);
+        }   
+        
+        
+        else {
             return occupied;
         }
     })
@@ -195,50 +242,4 @@ return (
        
     export { TetrisProvider, TetrisContext, TetrisConsumer}
         
-                 
-             
-
-             
-
-
-               
-         
-          
-           
-          
-
-                   
-                   
-   
-    
-
-                
-
-         
-         
-         
-       
-        
-            
-            
-    
-        
-        
-   
-   
-                              
-     
-
-    
-      
-
-
- 
- 
-     
-                              
-
-     
-
-   
 

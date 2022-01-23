@@ -42,7 +42,7 @@ return (
         <EmptySpace></EmptySpace>
         <EmptyLeft></EmptyLeft>
         <EmptyRight></EmptyRight>
-        <Table ></Table>
+         <Table></Table>
         <NextPieces></NextPieces>
         <EmptyDown></EmptyDown>
         <Bottom></Bottom>

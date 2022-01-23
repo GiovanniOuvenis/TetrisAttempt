@@ -76,3 +76,26 @@
 
    window.addEventListener("keyup", collisionDone)
 },[])*/
+
+
+
+
+useEffect(()=> {
+        setOccupiedIndexes((occupiedIndexes)=> {
+    
+            if (occupiedIndexes.length === 0) {
+                let firstFour = occupied.map((f)=>{
+                    return f.num;
+                })
+                return occupiedIndexes.concat(firstFour);
+            }
+             else {
+           let lengthMinusFour = occupied.length - 4;
+        let finalFour = occupied.slice(lengthMinusFour);
+        let itemsToAdd = finalFour.map((int) => {
+            return int.num;
+        })
+        return occupiedIndexes.concat(itemsToAdd);
+        }
+    })
+},[occupied]);

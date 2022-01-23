@@ -3,7 +3,8 @@ import React from 'react'
  function EmptySpace() {
     return (
         <div className='void'>
-                   </div>
+            <div className='tetrisTitle'>TETRIS</div>
+        </div>
     )
 }
 
