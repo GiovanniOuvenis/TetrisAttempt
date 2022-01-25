@@ -5,12 +5,14 @@ import {Pieces} from "./Data";
 const TetrisContext = React.createContext();
 
 function TetrisProvider({children}) {
-    const [playing, setPlaying ] = useState(false);    
+    
     const [currentColor, setCurrentColor] = useState({});
-    const [positionOfCurrentPiece, setPositionOfCurrentPiece] = useState([]);
-    const [occupied, setOccupied] = useState([]);
-    const [occupiedIndexes, setOccupiedIndexes] = useState([]);
+    const [positionOfCurrentPiece,setPositionOfCurrentPiece] = useState([]);
+    const [currentArray, setCurrentArray] = useState([]);
     const [seconds, setSeconds] = useState(1500);
+    const [trigger, setTrigger] = useState(false);
+    
+
     
 
 
@@ -31,7 +33,7 @@ function TetrisProvider({children}) {
       currentColor.backCol = pickRandomColor();
       return currentColor;
      })
-    }, [occupied])    
+    }, [trigger])    
 
 
 
@@ -47,19 +49,97 @@ function TetrisProvider({children}) {
        let picked = positions[positionsInt]
        return picked;
    }
-   setPositionOfCurrentPiece((positionOfCurrentPiece) => {
-      let pickedPosition = pickRandomPositionsOfPiece();
-      positionOfCurrentPiece = [...pickedPosition];
-      return positionOfCurrentPiece;
-  })
-}, [occupied])
+   setPositionOfCurrentPiece((positionOfCurrentPiece)=> {
+    let result = pickRandomPositionsOfPiece();
+    return result;
+   })
+   
+}, [trigger])
 
-  
 
+useEffect(() => {
+  setCurrentArray((currentArray)=> {   
+      
+        let currObject = {};
+        for (let s=0; s <=219; s++) {
+            currObject =  {num : s,
+                    brdr: "red",
+                    bck: "black",
+                    occupied: false
+                }                
+                currentArray.push(currObject);
+            } 
+            return currentArray;
+          })
+      }, [])
+        
+        
+      /*else {
+      let checked = currentArray.map((ce, index) => {
+         if (ce.num >= 210) {
+             ce.occupied = true;
+             return ce;
+         } 
+         if ( ce.occupied === true ) {
+             return ce;
+         } 
+         if (positionOfCurrentPiece.includes(index)) {
+             ce.bck = currentColor.backCol;
+             ce.brdr = currentColor.borCol;
+             return ce;
+         }
+
+      })
+      return checked;
+      }*/
+     
+
+ 
+useEffect(()=>{
+setTrigger(()=> {
+    let condition = positionOfCurrentPiece.map((it)=>{
+            if (it >= 210) {
+                return true;
+            } 
+            if (currentArray[it + 10].occupied === true) {
+                return true;
+            }
+            else {
+                return false;
+            }
+    })
+console.log(condition);
+    return condition.includes(true)? !trigger : trigger;   
+})
+},[positionOfCurrentPiece])
+
+// γραψε εδω ενα εφεκτ να χειριζεται το τριγκερ τι θα συμβαινει στο καρενταρρει
+
+
+
+useEffect(()=> {
+    const belated = setInterval(()=> {
+
+       setCurrentArray((currentArray)=>{         
+         for (let p=0; p< positionOfCurrentPiece.length; p++) {
+          currentArray[p].bck = currentColor.backCol;
+          currentArray[p].brdr = currentColor.brdr;
+         } 
+          return currentArray;
+
+          
+          
+        })
+
+    },seconds);
+
+    return () => clearInterval(belated);
+    }, []
+    ) 
 
  
 
-     
+  /*   
 // Εδώ χειριζόμαστε το πάτημα του δεξιά,  αριστερά και κατω βέλους.
  useEffect(() => {
      const rightLeftDownKey = (e) => {
@@ -72,7 +152,7 @@ function TetrisProvider({children}) {
                     if ((pos + 1) % 10 === 0) {
                            return true;
                     } 
-                    if (occupiedIndexes.includes(pos + 1)) {
+                    if (occupied.indexes.includes(pos + 1)) {
                         return true;
                     }
                     else {
@@ -92,7 +172,7 @@ function TetrisProvider({children}) {
                        if (piec % 10 === 0) {
                            return true;
                        } 
-                       if (occupiedIndexes.includes(piec - 1)) {
+                       if (occupied.indexes.includes(piec - 1)) {
                            return true;
                        }
                        else {
@@ -117,121 +197,37 @@ function TetrisProvider({children}) {
  }
  window.addEventListener("keyup", rightLeftDownKey)
 }, [])
-
-
-// In the next effect, we check if the bottom piece of the current piece is marginal or occupied 
-// and then we provide an object in the form that can be consumed by the table component, e.g. including
-// the border and the background color. This form helps the table to present the squares the way we want them
-// but we are missing an array that includes only the numbers of the occupied items so we create this effect
-// This way, in the next effect we can check in an easier way if a squre is occupied
-
-useEffect(()=> {
-    setOccupiedIndexes((occupiedIndexes)=> {
-
-        if (occupiedIndexes.length === 0) {
-            let firstFour = occupied.map((f)=>{
-                return f.num;
-            })
-            return occupiedIndexes.concat(firstFour);
-        }
-         else {
-       let lengthMinusFour = occupied.length - 4;
-    let finalFour = occupied.slice(lengthMinusFour);
-    let itemsToAdd = finalFour.map((int) => {
-        return int.num;
-    })
-    return occupiedIndexes.concat(itemsToAdd);
-    }
-})
-},[occupied]);
+*/
 
 
 
 
 
-useEffect(()=>{
-    setOccupied((occupied) => {
-        let checkConditionOne = positionOfCurrentPiece.map((el)=> {
-           
-            if (el <= 210) {
-                return false ;
-            }
-            
-             else {
-                return true;
-            }
-        });
-          
-        let checkConditionTwo = positionOfCurrentPiece.map((xy)=>{
-            let plusTen = xy + 10;
-           if (occupiedIndexes.includes(plusTen)) {
-               return true;
-           } else {
-               return false;
-           }
-        });
-
-        let checkConditionThree = positionOfCurrentPiece.map((lor) => {
-            if (occupiedIndexes.includes(lor + 1) || occupiedIndexes.includes(lor -1)) {
-              return true;
-            }
-            else {
-                return false;
-            }      
-
-        })
-
-          console.log(checkConditionThree)  
-          
-        if  (checkConditionOne.includes(true)) {
-            let objectsToConcat = positionOfCurrentPiece.map((newOccupiedCell)=> {
-                return { num: newOccupiedCell, brdr: currentColor.borCol, bck: currentColor.backCol}
-            })
-            return occupied.concat(objectsToConcat);
-        } 
-        if  (checkConditionTwo.includes(true) && !checkConditionThree.includes(true)) {
-            let objectsToConcat = positionOfCurrentPiece.map((newOccupiedCell)=> {
-                return { num: newOccupiedCell, brdr: currentColor.borCol, bck: currentColor.backCol}
-            })
-            return occupied.concat(objectsToConcat);
-        }   
-        
-        
-        else {
-            return occupied;
-        }
-    })
-},[positionOfCurrentPiece])
 
 
 
-
-
- 
 // Moving pieces to the next line. This effect should do only this.
 
-useEffect(()=> {
-    const belated = setInterval(()=> {
-       setPositionOfCurrentPiece((positionOfCurrentPiece)=>{         
-          return positionOfCurrentPiece.map((elem) => {
-              return elem + 10;
-          })
-        })
-    },seconds);
-    return () => clearInterval(belated);
-    }, []
-    ) 
+
+           
+            
+
+
+
+
+
+
         
             
                
              
 return (
     <TetrisContext.Provider value={{
-        gameStatus:playing,        
-        initialPosition: positionOfCurrentPiece, 
-        currCol : currentColor,        
-        occ: occupied,
-        occInd : occupiedIndexes
+        startingPosition: positionOfCurrentPiece, 
+        Col : currentColor,        
+        arrayToRender : currentArray     
+        
+        
                  
     }}>
         {children}
