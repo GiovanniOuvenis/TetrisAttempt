@@ -1,13 +1,8 @@
-import React, {useContext,useEffect
-} from 'react';
-import { TetrisContext } from "../TetrisContext";
+import React from 'react';
 
-function Square(props) {
-    
-    
+
+function Square(props) {     
     const {numberId} = props;
-  
-
     return (
         <div className="cell" key={numberId} style={{backgroundColor: props.back, borderColor: props.brd}}>
             cont

@@ -1,20 +1,13 @@
-import logo from './logo.svg';
 import './App.css';
 import { Outer} from "./Layout/Outer"
-import { Welcome } from './Layout/Welcome';
-import { Pause } from "./Layout/Pause";
-
-
-
-
+import { GameOver } from './Layout/GameOver';
 
 function App() {
-
   return (
     <> 
+    <GameOver></GameOver>
     <Outer> </Outer>     
-    </>
-       
+    </>       
      );
    }
    

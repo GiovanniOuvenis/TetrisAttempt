@@ -2,9 +2,7 @@ import React from 'react';
 
 
 
- function Emptydiv() {
-     
-
+ function EmptyUpLeft() {    
     return (
         <section className='empty-up' >
             content
@@ -12,4 +10,4 @@ import React from 'react';
     )
 }
 
-export {Emptydiv}
+export {EmptyUpLeft}

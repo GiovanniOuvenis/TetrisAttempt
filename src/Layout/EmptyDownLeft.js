@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function EmptyDown() {
+function EmptyDownLeft() {
 
 
     
@@ -10,3 +10,5 @@ export default function EmptyDown() {
         </div>
     )
 }
+
+export { EmptyDownLeft }

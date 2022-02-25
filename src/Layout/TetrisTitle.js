@@ -1,6 +1,6 @@
 import React from 'react'
 
- function EmptySpace() {
+ function TetrisTitle() {
     return (
         <div className='void'>
             <div className='tetrisTitle'>TETRIS</div>
@@ -9,4 +9,4 @@ import React from 'react'
 }
 
 
-export { EmptySpace}
+export { TetrisTitle }

@@ -1,9 +1,12 @@
 import React from 'react'
 
-export default function Bottom() {
+function EmptyDownCenter() {
     return (
         <div className='bottom'>
             con
         </div>
     )
 }
+
+
+export {EmptyDownCenter}
