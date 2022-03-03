@@ -11,6 +11,8 @@ function TetrisProvider({children}) {
     const [seconds, setSeconds] = useState(1500); 
     const [trigger, setTrigger] = useState(false); 
     const [score, setScore] = useState("0000005");
+    const [ completeRows, setCompleteRows] = useState();
+    const [cleared, setCleared] = useState([]);
     
     const contextRef = useRef([]);
   
@@ -22,7 +24,7 @@ function TetrisProvider({children}) {
         return choices[colorNum];
      };   
      function pickRandomPositionsOfPiece() {
-        const positions = [[25,15,35,5],[15,4,5,16],[14,4,5,13],[15,4,5,25],[15,5,16,25],[15,5,6,25],[14,4,15,5]]
+        const positions = [/*[25,15,35,5],[15,4,5,16],[14,4,5,13],[15,4,5,25],[15,5,16,25],[15,5,6,25],*/[14,4,15,5]]
         const int = positions.length;
         const positionsInt = Math.floor(Math.random() * int);
         let picked = positions[positionsInt]
@@ -33,6 +35,17 @@ function TetrisProvider({children}) {
         stateArg.backCol = pickRandomColor();
         return stateArg;
       };
+
+      function recursiveCount(numArg) {
+        if (!contextRef.current.includes(numArg)) {
+            return false;
+        } else if (contextRef.current.includes(numArg) && (numArg + 1) % 10 === 0 ) {
+           return numArg;
+        } else {
+            return [numArg].concat(recursiveCount(numArg + 1));
+        }
+      }
+      
      
 
 // Καθορίζει τι χρώμα θα έχει το κομμάτι που θα είναι σε κίνηση. Το occupied εχει σαν dependency
@@ -319,10 +332,7 @@ useEffect(()=>{
     })
   },[positionOfCurrentPiece])
 
-  useEffect(()=>{
-   console.log(contextRef.current.length)
-  },[positionOfCurrentPiece])
-  
+ 
         
         
         
@@ -379,7 +389,7 @@ useEffect(()=> {
 // το parseInt και κανω υπολογισμους και το ξανακανω  string και το επιστρεφω
 useEffect(()=>{
   setScore((score)=>{
-      let parsed = parseInt(score);      
+      let parsed = parseInt(score);  
           
       let newScore = parsed + 5;   
       let stringedLength = newScore.toString().length; 
@@ -397,8 +407,38 @@ useEffect(()=>{
 },[positionOfCurrentPiece])
         
         
+useEffect(()=> {
+    setCompleteRows(()=>{
+    let arrToExtractMinVal = contextRef.current;
+    let minimum = Math.min.apply(null,arrToExtractMinVal);
+    let floored = Math.floor(minimum / 10);
+    let rowStart = floored * 10;
+    let possibleResults = [];
+    for (let m= rowStart; m <= 210; m+= 10) {
+       if (contextRef.current.includes(m) && contextRef.current.includes(m + 9)) {
+            possibleResults.push(m);
+       }
+    }
+    let completeRows = possibleResults.map((pr)=>{
+   return recursiveCount(pr);
+    }).flat();
+    
+    
+    return completeRows;
+})
+}, [contextRef.current])
 
-        
+
+
+useEffect(()=>{
+  setCleared((cleared)=>{
+     let filtered = occupied.filter((objItem)=>{
+         return !completeRows.includes(objItem.num);
+     })
+     console.log(cleared)
+     return filtered;
+  })
+},[completeRows])
             
 
          
@@ -409,7 +449,8 @@ useEffect(()=>{
                currCol : currentColor,        
                occ: occupied,                           
                trigg: trigger,
-               points : score
+               points : score,
+               clear: cleared
                         
            }}>
                {children}

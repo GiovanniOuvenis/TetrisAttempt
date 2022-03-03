@@ -9,6 +9,7 @@ import { TetrisContext} from "../TetrisContext";
    const borderAndBackgroundColors = tableContext.currCol;
    const squaresToPaint = tableContext.initialPosition;
    const tableOccupied = tableContext.occ;
+   const cleArr = tableContext.clear;
    const endGame = tableContext.gameOver;   
    const [contents, setContents] = useState([]);
 
@@ -44,9 +45,9 @@ import { TetrisContext} from "../TetrisContext";
     // αφου γινει η προηγουμενη διαδικασια, ψαχνω ενα ενα τα κατειλημμενα κομματια και 
     // τα κουτια του array που δημιουργω τωρα, τα οποια εχουν τα αντιστοιχα νουμερα τα βαφω με ότι
     // πληροφοριες λεει το object που βρισκεται στα κατειλημμενα γι αυτο το νουμερο.
-    for (let o=0; o < tableOccupied.length; o++) {
-      let ind = tableOccupied[o].num;
-      contents[ind] = tableOccupied[o];
+    for (let o=0; o < cleArr.length; o++) {
+      let ind = cleArr[o].num;
+      contents[ind] = cleArr[o];
     }
     return contents;
   })
